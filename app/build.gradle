@@ -1,0 +1,82 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
+}
+
+android {
+    namespace 'com.example.weatherlatam'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.weatherlatam"
+        minSdk 29
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        Prod {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField ("String", "BKCOLOR", "\"black\"")
+            buildConfigField ("boolean", "ENABLE_CRASHLYTICS", "false")
+        }
+        QA {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField ("String", "BKCOLOR", "\"orange\"")
+            resValue("string","BKCOLOR","\"orange\"")
+            signingConfig signingConfigs.debug
+        }
+        Dev {
+            debuggable true
+            minifyEnabled false
+            buildConfigField ("String", "BKCOLOR", "\"white\"")
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    flavorDimensions += "version"
+    productFlavors {
+        free {
+            applicationIdSuffix = ".free"
+            versionNameSuffix = "-free"
+            buildConfigField "String", "URL", "\"https://randomuser.me/api/\""
+        }
+
+        premium {
+            applicationIdSuffix = ".premium"
+            versionNameSuffix = "-premium"
+            buildConfigField "String", "URL", "\"https://mindicador.cl/api\""
+        }
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+}
+
+dependencies {
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+}
